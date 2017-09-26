@@ -13,6 +13,14 @@ location /api/upload {
     client_max_body_size 9m;
 }
 
+location /api/uploadalbum {
+    proxy_pass http://127.0.0.1:6699;
+    proxy_set_header Host            $host;
+    proxy_set_header X-Forwarded-For $remote_addr;
+
+    client_max_body_size 42m;  # Don't tell me what to do
+}
+
 location / {
     root /opt/quad-image/web/;
     try_files $uri $uri/index.html =404;

@@ -31,6 +31,15 @@
     </p>
 </div>
 
+<div id="manualalbum">
+    <form method="post" action="/api/uploadalbum" accept-charset="utf-8" enctype="multipart/form-data">
+        <label>Image 1: <input type="file" name="image1" accept="image/*" required/></label>
+        <label>Image 2: <input type="file" name="image2" accept="image/*" required/></label>
+        <label>Image 3: <input type="file" name="image3" accept="image/*" required/></label>
+        <label>Image 4: <input type="file" name="image4" accept="image/*" required/></label>
+        <input type="submit"/>
+    </form>
+</div>
 <script>
     $('#paste').pastableNonInputable().on('pasteImage', (ev, data) => {
         let msg = $('#msg');

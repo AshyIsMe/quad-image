@@ -140,7 +140,7 @@ fn upload(req: &mut Request) -> IronResult<Response> {
                 }
                 Ok(code) => {
                     println!("{:?} {:?}: {}", remote_addr, remote_forwarded, code);
-                    let url = format!("https://{}/{}", host, code);
+                    let url = format!("http://{}/{}", host, code);
                     let dest = iron::Url::parse(url.as_str()).expect("url 2");
                     if params.contains_key("js-sucks") {
                         Ok(Response::with((status::Ok, code)))
@@ -159,8 +159,35 @@ fn upload(req: &mut Request) -> IronResult<Response> {
     }
 }
 
+fn uploadalbum(req: &mut Request) -> IronResult<Response> {
+    let host = req.headers
+        .get::<iron::headers::Host>()
+        .expect("host header present")
+        .hostname
+        .clone();
+    let remote_addr = req.remote_addr;
+    let remote_forwarded = req.headers.get_raw("X-Forwarded-For").map(|vecs| {
+        vecs.iter()
+            .map(|vec| {
+                String::from_utf8(vec.clone()).expect("valid utf-8 forwarded for")
+            })
+            .collect::<Vec<String>>()
+    });
+    let params = req.get_ref::<Params>();
+    if params.is_err() {
+        return Ok(Response::with((status::BadRequest, "'not a form post'")));
+    }
+
+    let params: &params::Map = params.unwrap();
+
+    println!("Lololoooo: {}", 42);
+    return Ok(Response::with((status::BadRequest, "'Matey potateeeeeey'")));
+
+}
+
 fn main() {
     let mut router = router::Router::new();
     router.post("/api/upload", upload, "upload");
+    router.post("/api/uploadalbum", uploadalbum, "uploadalbum");
     Iron::new(router).http("127.0.0.1:6699").unwrap();
 }
